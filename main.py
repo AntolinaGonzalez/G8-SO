@@ -23,15 +23,9 @@ def CrearProceso():
     y = int(input('tamanio\n'))
     z = int(input('ta\n'))
     w = int(input('ti\n'))
-    return Procesos(x, y, z, w)
-
-
-def Procesos(id, tamanio, ta, ti):
-    proceso = Proceso(id, tamanio, ta, ti)
+    proceso = Proceso(x, y, z, w)
     procesos.append(proceso)
     return proceso.idProceso
-
-# cola de listos
 
 
 def Listos():
@@ -70,7 +64,7 @@ while ejecucion:
     if x == '2':
         # procesos en memoria
         for i in Listos():
-            print('primero' + str(i.idProceso))
+            print('primero ' + str(i.idProceso))
             print(i.tiempoArribo)
             print(i.tiempoIrrupcion)
         tiempo += 1
