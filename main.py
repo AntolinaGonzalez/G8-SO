@@ -59,17 +59,20 @@ def asignacionMemoria(procesos):
     for i in procesos:
         bestFit=''
         tamanio=999999999
+        index=0
         print(i.idProceso)
-        for j in particiones:
+        for j in range(len(particiones)):
             print(i.tamanio)
-            print(j.tamanio)
-            if i.tamanio<= j.tamanio and tamanio>j.tamanio:
-                print('entro')
-                bestFit = j.idParticion
-                tamanio = j.tamanio
-                index = particiones.index()
+            print(particiones[j].tamanio)
+            if i.tamanio<= particiones[j].tamanio and tamanio>particiones[j].tamanio:
+                if particiones[j].estado ==0:
+                    print('entro')
+                    bestFit = particiones[j].idParticion
+                    tamanio = particiones[j].tamanio
+                    index = j
         if bestFit!='':
             particiones[index].estado=1
+        
     print('---------------Particiones---------------')
     for i in particiones:
         print(i.idParticion)
