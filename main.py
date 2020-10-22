@@ -6,26 +6,40 @@ procesos = []
 tiempo = 0
 coladeListos = []
 colaTerminados = []
-
+procesosAsignar = []
 
 print('---------------Particiones---------------')
 for i in particiones:
     print(i.idParticion)
     print(i.tamanio)
+    print(i.estado)
+
+# listado de procesos
+
+
+def listadoProcesos(proceso):
+    for i in proceso:
+        print('------------------------------------')
+        print('id: ' + str(i.idProceso))
+        print('tamanio: ' + str(i.tamanio))
+        print('tiempo de arribo: ' + str(i.tiempoArribo))
+        print('tiempo de irrupcion: '+str(i.tiempoIrrupcion))
 
 # asignacion de un proceso
 
 
 def CrearProceso():
+    global procesos
     print('Ingrese un id y un tamanio un ta y un ti \n')
 
-    x = int(input('id \n'))
-    y = int(input('tamanio\n'))
-    z = int(input('ta\n'))
-    w = int(input('ti\n'))
-    proceso = Proceso(x, y, z, w)
+    idPart = int(input('Ingrese el id del proceso \n'))  # automatizar esto
+    tamanio = int(input('Ingrese el tamanio del proceso\n'))
+    ta = int(input('Ingrese el tiempo de arribo \n'))
+    ti = int(input('Ingrese el tiempo de irrupcion ti\n'))
+    proceso = Proceso(idPart, tamanio, ta, ti)
     procesos.append(proceso)
-    return proceso.idProceso
+    procesos = sorted(
+                procesos, key=lambda x: x.tiempoIrrupcion)
 
 
 def Listos():
@@ -39,32 +53,63 @@ def Listos():
                 coladeListos, key=lambda x: x.tiempoIrrupcion)
     return coladeListos
 
-def asignacionMemoria():
-    pass
+
+def asignacionMemoria(procesos):
+    
+    for i in procesos:
+        bestFit=''
+        tamanio=999999999
+        print(i.idProceso)
+        for j in particiones:
+            print(i.tamanio)
+            print(j.tamanio)
+            if i.tamanio<= j.tamanio and tamanio>j.tamanio:
+                print('entro')
+                bestFit = j.idParticion
+                tamanio = j.tamanio
+                index = particiones.index()
+        if bestFit!='':
+            particiones[index].estado=1
+    print('---------------Particiones---------------')
+    for i in particiones:
+        print(i.idParticion)
+        print(i.tamanio)
+        print(i.estado)
+
+
+
 
 def controlSalidaProceso():
     pass
 
-#creamos un proceso para iniciar
+
+# creamos un proceso para iniciar
 print(CrearProceso())
 print('Lista de procesos \n')
-for i in range(len(procesos)):
-    print(procesos[i].idProceso)
+listadoProcesos(procesos)
+print('------------------------------------')
 
 while ejecucion:
-    #menu
+    # menu
+    print('')
     x = input(
         '1. Cargar mas procesos \n2. Comenzar ejecucion de los procesos en memoria \n3.q para salir')
     if x == '1':
-        #se crean procesos
+        # se crean procesos
         print(CrearProceso())
         print('Lista de procesos \n')
-        for i in procesos:
-            print(i.idProceso)
+        # listado de procesos
+        listadoProcesos(procesos)
+        print('------------------------------------')
+
     if x == '2':
         # procesos en memoria
-        for i in Listos():
-            print('primero ' + str(i.idProceso))
-            print(i.tiempoArribo)
-            print(i.tiempoIrrupcion)
+        Listos()
+        print('listado de listos')
+        listadoProcesos(coladeListos)
+        print('------------------------------------')
+        print('Asignacion de memoria')
+        asignacionMemoria(coladeListos)
         tiempo += 1
+    if x == 'q':
+        ejecucion = False
