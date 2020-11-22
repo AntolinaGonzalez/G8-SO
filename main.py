@@ -51,7 +51,7 @@ def CrearProceso():
     global procesos
     global id_proceso
     print()
-    print('Ingrese un la informacion de un proceso \n')
+    print('Ingrese la informacion de un proceso \n')
 
     id_proceso = id_proceso + 1
     idPart = id_proceso  # automatizar esto
@@ -83,15 +83,15 @@ def asignacionMemoria(procesos):
     for i in procesos:
         if i.asignado != 1:
             bestFit = ''
-            tamanio = 999999999
+            #tamanio = 999999999
             index = 0
+            particiones = sorted(
+                particiones, key=lambda z: z.tamanio)
             #print(i.idProceso)
             for j in range(len(particiones)):
             #print(i.tamanio)
             #print(particiones[j].tamanio)
-             if i.tamanio <= particiones[j].tamanio and tamanio > particiones[j].tamanio and i.asignado != 1:
-                particiones = sorted(
-                    particiones, key=lambda z: z.tamanio)
+             if i.tamanio <= particiones[j].tamanio and i.asignado != 1 and particiones[j].estado == 0:
                 if particiones[j].estado == 0:
                     print('Proceso ' + str(i.idProceso) +' asignado a particion ' +str(particiones[j].idParticion))
                     bestFit = particiones[j].idParticion
@@ -120,15 +120,17 @@ def asignacionMemoria(procesos):
 #            i.tiempoSalida = 0
 #            i.proceso = None
 
-def asignarCpu(coladeListos):
+def asignarCpu(coladeAsignados):
     global tiempo
     global procesador
-    if procesador.idProcesoAsignado == 0:
+    if coladeAsignados:
+        if procesador.idProcesoAsignado == 0:
 
-        coladeListos = sorted(coladeListos, key=lambda z: z.tiempoArribo)
-        procesador.idProcesoAsignado = coladeListos[0].idProceso
-        procesador.tiempoDeAsignacion = tiempo
-        procesador.tiempoDeIrrupcion = coladeListos[0].tiempoIrrupcion
+          coladeAsignados = sorted(coladeAsignados, key=lambda z: z.tiempoArribo)
+          procesador.idProcesoAsignado = coladeAsignados[0].idProceso
+          procesador.tiempoDeAsignacion = tiempo
+          procesador.tiempoDeIrrupcion = coladeAsignados[0].tiempoIrrupcion
+
 
 
 #def controlProcesos():
@@ -148,8 +150,14 @@ def controlProcesos():
         for i in particiones:
             if i.idProceso == procesador.idProcesoAsignado:
                 colaTerminados.append(i.proceso)
+                coladeAsignados.remove(i.proceso)
                 procesador.idProcesoAsignado = 0
                 procesador.tiempoTranscurrido = 0
+                i.fragmentacion = 0
+                i.estado = 0
+                i.tiempoSalida = None
+                i.proceso = None
+                i.idProceso = None
 
 def controlSalidaProceso():
     pass
@@ -162,14 +170,20 @@ print(CrearProceso())
 print('Lista de procesos \n')
 listadoProcesos(procesos)
 print('------------------------------------')
+x = '0'
 
 
 
 while ejecucion:
     # menu
     print('')
-    x = input(
-        '1. Cargar mas procesos \n2. Ejecucion de los procesos en memoria \n3.q para salir\n')
+    if x != '2':
+        x = input(
+         '1. Cargar mas procesos \n2. Ejecucion de los procesos en memoria \n3.q para salir\n')
+    else:
+        input('Presione cualquier tecla para continuar la ejecución de los procesos ya cargados')
+
+
     if x == '1':
      # se crean procesos
 
@@ -181,27 +195,39 @@ while ejecucion:
 
     if x == '2':
         # procesos en memoria
+        print('Instancia de tiempo ' + str(tiempo))
+        print('------------------------------------')
         Listos()
-        print('listado de listos')
+        print('Listado de listos antes de asignar')
         listadoProcesos(coladeListos)
         print('------------------------------------')
         print('Asignacion de memoria')
         asignacionMemoria(coladeListos)
-        print('Procesos que fueron guardados en memoria')
+        print('Procesos actualmente guardados en memoria')
         listadoProcesos(coladeAsignados)
         print('------------------------------------')
-        asignarCpu(coladeListos)
-        print('Proceso actualmente en CPU: ' + str(procesador.idProcesoAsignado))
+        asignarCpu(coladeAsignados)
+        print('Proceso actualmente en CPU: ' + str(procesador.idProcesoAsignado) + ' (0 indica CPU desocupado')
         print('------------------------------------')
-        print('procesos que aun se encuentran en la cola de listos')
+        print('Procesos que aun se encuentran en la cola de listos')
         eliminar()
         listadoProcesos(coladeListos)
         print('------------------------------------')
         # Eliminar procesos que ya termino de ejecutar
+        #print('procesador.tiempoDeAsignacion ' + str(procesador.tiempoDeAsignacion) +  ' procesador.tiempoDeIrrupcion ' + str(procesador.tiempoDeIrrupcion))
         controlProcesos()
-        print('Procesos que terminaron')
+        print('Procesos terminados concluida la instancia de tiempo '+ str(tiempo))
         listadoProcesos(colaTerminados)
+        asignarCpu(coladeAsignados) #############
         tiempo += 1
         procesador.tiempoTranscurrido +=1
     if x == 'q':
         ejecucion = False
+
+
+#sacar de memoria procesos terminados       LISTO
+#marcar particiones ocmo desocupadas        LISTO
+#cambiar cola de lsitos por cola de asignados en asignacion de cpu      LISTO
+#mostrar tiempo transcurrido                LISTO
+#cola de listos para procesos en memoria estado nuevo/suspendido para procesos ingresados   LISTO ??
+#evitar que loopee el ingreso de procesos LISTO
