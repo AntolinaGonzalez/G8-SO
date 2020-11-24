@@ -12,25 +12,40 @@ id_proceso = 0
 
 
 def particioneslistado():
-    print('---------------Particiones---------------')
-    for i in particiones:
-        print('id de la Particion: ' + str(i.idParticion))
-        print('tamanio de la particion: ' + str(i.tamanio))
-        print('estado de la particion: ' + str(i.estado))
-        print('fragmentacion interna: ' + str(i.fragmentacion) + 'Kb')
-        print('----------------------------------------------')
-
+    print('----------------------------------------------Particiones---------------------------------------------------------')
+    espacio='             '
+    # for i in particiones:
+    #     print('id de la Particion: ' + str(i.idParticion))
+    #     print('tamanio de la particion: ' + str(i.tamanio))
+    #     print('estado de la particion: ' + str(i.estado))
+    #     print('fragmentacion interna: ' + str(i.fragmentacion) + 'Kb')
+    #     print('----------------------------------------------')
+    print('     id Particion           |       Tamanio               |       Estado              |       Fragmentacion         |')
+    print('-------------------------------------------------------------------------------------------------------------------')
+    print(espacio+ str(particiones[0].idParticion) + espacio + '|' + espacio   + str(particiones[0].tamanio) + espacio + '|' + espacio + str(particiones[0].estado) + espacio +'|' + espacio + str(particiones[0].fragmentacion) + espacio + '  |')
+    print('-------------------------------------------------------------------------------------------------------------------')
+    print(espacio+ str(particiones[1].idParticion) + espacio + ' |' + espacio   + str(particiones[1].tamanio) + espacio + '|' + espacio + str(particiones[1].estado) + espacio +' |' + espacio + str(particiones[1].fragmentacion) + espacio + ' |')
+    print('-------------------------------------------------------------------------------------------------------------------')
+    print(espacio+ str(particiones[2].idParticion) + espacio + ' |' + espacio   + str(particiones[2].tamanio) + espacio + '|' + espacio + str(particiones[2].estado) + espacio +' |' + espacio + str(particiones[2].fragmentacion) + espacio + ' |')
+    print('-------------------------------------------------------------------------------------------------------------------')
+    print(espacio+ str(particiones[3].idParticion) + espacio + ' |' + espacio   + str(particiones[3].tamanio) + espacio + ' |' + espacio + str(particiones[3].estado) + espacio +' |' + espacio + str(particiones[3].fragmentacion) + espacio + ' |')
 
 # listado de procesos
 
 
 def listadoProcesos(proceso):
+    espacio = '            '
+    print('     id Proceso          |       Tamanio             |    Tiempo de arribo     |   Tiempo de irrupcion   |')
+    print('---------------------------------------------------------------------------------------------------------|')
     for i in proceso:
-        print('------------------------------------')
-        print('id: ' + str(i.idProceso))
-        print('tamanio: ' + str(i.tamanio))
-        print('tiempo de arribo: ' + str(i.tiempoArribo))
-        print('tiempo de irrupcion: ' + str(i.tiempoIrrupcion))
+        print( espacio + str(i.idProceso) + espacio + '|' + espacio + str(i.tamanio) + espacio + '|' + espacio + str(i.tiempoArribo)+ espacio +'|'+ espacio + str(i.tiempoIrrupcion) + espacio + '|')
+        print('---------------------------------------------------------------------------------------------------------|')
+        
+        # print('------------------------------------')
+        # print('id: ' + str(i.idProceso))
+        # print('tamanio: ' + str(i.tamanio))
+        # print('tiempo de arribo: ' + str(i.tiempoArribo))
+        # print('tiempo de irrupcion: ' + str(i.tiempoIrrupcion))
 
 
 # eliminar procesos que ya fueron asignados
@@ -168,7 +183,6 @@ particioneslistado()
 print(CrearProceso())
 print('Lista de procesos \n')
 listadoProcesos(procesos)
-print('------------------------------------')
 x = '0'
 
 
@@ -188,28 +202,35 @@ while ejecucion:
         print('Lista de procesos \n')
         # listado de procesos
         listadoProcesos(procesos)
-        print('------------------------------------')
 
     if x == '2':
         # procesos en memoria
-        print('Instancia de tiempo ' + str(tiempo))
+        print('-------------------------')
+        print('| Instancia de tiempo ' + str(tiempo) + ' |')
+        print('-------------------------')
+        print()
         #print('------------------------------------')
         print('Listado de Procesos nuevos ')
+        print('---------------------------')
+        print()
         listadoProcesos(Nuevos())
-        
+        print()
         print('Asignacion de memoria')
+        print('----------------------')
         asignacionMemoria(coladeNuevos)
+        print()
         print('Procesos que han sido asignado a memoria')
+        print('------------------------------------------')
         listadoProcesos(coladeAsignados)
-        print('------------------------------------')
         asignarCpu(coladeAsignados)
-        print('------------------------------------')
+        print()
         print('Proceso actualmente en CPU: ' + str(procesador.idProcesoAsignado) + ' (0 indica CPU desocupado')
-        print('------------------------------------')
+        print('------------------------------------------')
+        print()
         print('Procesos que han sido asignado a memoria pero todavia no se han ejecutado')
+        print('--------------------------------------------------------------------------')
         #eliminar()
         listadoProcesos(coladeNuevos)
-        print('------------------------------------')
         # Eliminar procesos que ya termino de ejecutar
         # #print('procesador.tiempoDeAsignacion ' + str(procesador.tiempoDeAsignacion) +  ' procesador.tiempoDeIrrupcion ' + str(procesador.tiempoDeIrrupcion))
         controlProcesos()
