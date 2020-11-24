@@ -124,6 +124,22 @@ def asignacionMemoria(procesos):
 
     particioneslistado()
 
+def memoria(procesos):
+    tamanio=9999999
+    id=0
+    for i in procesos:
+        for j in particiones:
+            if j.tamanio>= i.tamanio and j.tamanio < tamanio and j.estado == 0:
+                tamanio=j.tamanio
+                id=int(j.idParticion)
+                proceso=i
+        coladeAsignados.append(i)
+        particiones[id].estado=1
+        particiones[id].fragmentacion = particiones[id].tamanio - proceso.tamanio
+        particiones[id].tiempoSalida = tiempo + proceso.tiempoIrrupcion
+        particiones[id].proceso = proceso
+        particiones[id].idProceso = proceso.idProceso
+    particioneslistado()
 
 #def controlProcesos():
 #    global tiempo
@@ -217,7 +233,7 @@ while ejecucion:
         print()
         print('Asignacion de memoria')
         print('----------------------')
-        asignacionMemoria(coladeNuevos)
+        memoria(coladeNuevos)
         print()
         print('Procesos que han sido asignado a memoria')
         print('------------------------------------------')
