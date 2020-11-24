@@ -38,9 +38,13 @@ def listadoProcesos(proceso):
     print('     id Proceso          |       Tamanio             |    Tiempo de arribo     |   Tiempo de irrupcion   |')
     print('---------------------------------------------------------------------------------------------------------|')
     for i in proceso:
-        print( espacio + str(i.idProceso) + espacio + '|' + espacio + str(i.tamanio) + espacio + '|' + espacio + str(i.tiempoArribo)+ espacio +'|'+ espacio + str(i.tiempoIrrupcion) + espacio + '|')
-        print('---------------------------------------------------------------------------------------------------------|')
-        
+        if i.tamanio> 99 :
+            print( espacio + str(i.idProceso) + espacio + '|' + espacio + str(i.tamanio) + espacio + '|' + espacio + str(i.tiempoArribo)+ espacio +'|'+ espacio + str(i.tiempoIrrupcion) + espacio + '|')
+            print('---------------------------------------------------------------------------------------------------------|')
+        else:
+            print( espacio + str(i.idProceso) + espacio + '|' + espacio + str(i.tamanio) + espacio + ' |' + espacio + str(i.tiempoArribo)+ espacio +'|'+ espacio + str(i.tiempoIrrupcion) + espacio + '|')
+            print('---------------------------------------------------------------------------------------------------------|')
+
         # print('------------------------------------')
         # print('id: ' + str(i.idProceso))
         # print('tamanio: ' + str(i.tamanio))
@@ -51,12 +55,7 @@ def listadoProcesos(proceso):
 # eliminar procesos que ya fueron asignados
 
 
-def eliminar():
-    for i in coladeAsignados:
-        for j in coladeNuevos:
-            if i != j:
-                coladeNuevos.remove(i)
-    return coladeNuevos
+
 
 
 # asignacion de un proceso
@@ -92,37 +91,6 @@ def Nuevos():
     return coladeNuevos
 
 
-def asignacionMemoria(procesos):
-    global coladeAsignados
-    global particiones
-    for i in procesos:
-        if i.asignado != 1:
-            bestFit = ''
-            #tamanio = 999999999
-            index = 0
-            particiones = sorted(
-                particiones, key=lambda z: z.tamanio)
-            #print(i.idProceso)
-            for j in range(len(particiones)):
-            #print(i.tamanio)
-            #print(particiones[j].tamanio)
-             if i.tamanio <= particiones[j].tamanio and i.asignado != 1 and particiones[j].estado == 0:
-                if particiones[j].estado == 0:
-                    print('Proceso ' + str(i.idProceso) +' asignado a particion ' +str(particiones[j].idParticion))
-                    bestFit = particiones[j].idParticion
-                    tamanio = particiones[j].tamanio
-                    index = j
-                    i.asignado = 1
-                    particiones[j].idProceso = i.idProceso
-                    coladeAsignados.append(i)
-                if bestFit != '':
-                     particiones[index].estado = 1
-                     particiones[index].fragmentacion = particiones[index].tamanio - i.tamanio
-                     particiones[index].tiempoSalida = tiempo + i.tiempoIrrupcion
-                     particiones[index].proceso = i
-                     particiones[j].idProceso = i.idProceso
-
-    particioneslistado()
 
 def memoria(procesos):
     tamanio=9999999
@@ -141,15 +109,7 @@ def memoria(procesos):
         particiones[id].idProceso = proceso.idProceso
     particioneslistado()
 
-#def controlProcesos():
-#    global tiempo
-#    for i in particiones:
-#        if tiempo == i.tiempoSalida:
-#            colaTerminados.append(i.proceso)
-#            i.estado = 0
-#            i.fragmentacion = 0
-#            i.tiempoSalida = 0
-#            i.proceso = None
+
 
 def asignarCpu(coladeAsignados):
     global tiempo
@@ -163,16 +123,6 @@ def asignarCpu(coladeAsignados):
           coladeAsignados.remove(coladeAsignados[0])
           
           
-
-#def controlProcesos():
-#    global tiempo
-#    for i in particiones:
-#        if tiempo == i.tiempoSalida:
-#            colaTerminados.append(i.proceso)
-#            i.estado = 0
-#            i.fragmentacion = 0
-#            i.tiempoSalida = 0
-#            i.proceso = None
 
 def controlProcesos():
     global tiempo
@@ -211,7 +161,6 @@ while ejecucion:
          '1. Cargar mas procesos \n2. Ejecucion de los procesos en memoria \n3.q para salir\n')
     else:
         input('Presione cualquier tecla para continuar la ejecución de los procesos ya cargados')
-
     if x == '1':
      # se crean procesos
         print(CrearProceso())
@@ -258,10 +207,3 @@ while ejecucion:
     if x == 'q':
         ejecucion = False
 
-
-#sacar de memoria procesos terminados       LISTO
-#marcar particiones ocmo desocupadas        LISTO
-#cambiar cola de lsitos por cola de asignados en asignacion de cpu      LISTO
-#mostrar tiempo transcurrido                LISTO
-#cola de listos para procesos en memoria estado nuevo/suspendido para procesos ingresados   LISTO ??
-#evitar que loopee el ingreso de procesos LISTO
