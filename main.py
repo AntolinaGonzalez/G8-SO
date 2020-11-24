@@ -4,7 +4,7 @@ from repository import *
 ejecucion = True
 procesos = []
 tiempo = 0
-coladeListos = []
+coladeNuevos = []
 coladeAsignados = []
 colaTerminados = []
 procesosAsignar = []
@@ -38,10 +38,10 @@ def listadoProcesos(proceso):
 
 def eliminar():
     for i in coladeAsignados:
-        for j in coladeListos:
-            if i == j:
-                coladeListos.remove(i)
-    return coladeListos
+        for j in coladeNuevos:
+            if i != j:
+                coladeNuevos.remove(i)
+    return coladeNuevos
 
 
 # asignacion de un proceso
@@ -60,21 +60,21 @@ def CrearProceso():
     ti = int(input('Ingrese el tiempo de irrupcion ti\n'))
     proceso = Proceso(idPart, tamanio, ta, ti)
     procesos.append(proceso)
-    procesos = sorted(
-        procesos, key=lambda x: x.tiempoIrrupcion)
+    # procesos = sorted(
+    #     procesos, key=lambda x: x.tiempoIrrupcion)
 
 
-def Listos():
+def Nuevos():
     global tiempo
-    global coladeListos
+    global coladeNuevos
     global coladeAsignados
     for i in procesos:
         if i.tiempoArribo == tiempo:
-            coladeListos.append(i)
+            coladeNuevos.append(i)
             # Ordenar teniendo en cuenta el tiempo de irrupcion
-            coladeListos = sorted(
-                coladeListos, key=lambda x: x.tiempoIrrupcion)
-    return coladeListos
+            coladeNuevos = sorted(
+                coladeNuevos, key=lambda x: x.tiempoIrrupcion)
+    return coladeNuevos
 
 
 def asignacionMemoria(procesos):
@@ -125,13 +125,13 @@ def asignarCpu(coladeAsignados):
     global procesador
     if coladeAsignados:
         if procesador.idProcesoAsignado == 0:
-
-          coladeAsignados = sorted(coladeAsignados, key=lambda z: z.tiempoArribo)
           procesador.idProcesoAsignado = coladeAsignados[0].idProceso
           procesador.tiempoDeAsignacion = tiempo
           procesador.tiempoDeIrrupcion = coladeAsignados[0].tiempoIrrupcion
-
-
+          coladeNuevos.remove(coladeAsignados[0])
+          coladeAsignados.remove(coladeAsignados[0])
+          
+          
 
 #def controlProcesos():
 #    global tiempo
@@ -150,7 +150,6 @@ def controlProcesos():
         for i in particiones:
             if i.idProceso == procesador.idProcesoAsignado:
                 colaTerminados.append(i.proceso)
-                coladeAsignados.remove(i.proceso)
                 procesador.idProcesoAsignado = 0
                 procesador.tiempoTranscurrido = 0
                 i.fragmentacion = 0
@@ -183,10 +182,8 @@ while ejecucion:
     else:
         input('Presione cualquier tecla para continuar la ejecución de los procesos ya cargados')
 
-
     if x == '1':
      # se crean procesos
-
         print(CrearProceso())
         print('Lista de procesos \n')
         # listado de procesos
@@ -196,25 +193,25 @@ while ejecucion:
     if x == '2':
         # procesos en memoria
         print('Instancia de tiempo ' + str(tiempo))
-        print('------------------------------------')
-        Listos()
-        print('Listado de listos antes de asignar')
-        listadoProcesos(coladeListos)
-        print('------------------------------------')
+        #print('------------------------------------')
+        print('Listado de Procesos nuevos ')
+        listadoProcesos(Nuevos())
+        
         print('Asignacion de memoria')
-        asignacionMemoria(coladeListos)
-        print('Procesos actualmente guardados en memoria')
+        asignacionMemoria(coladeNuevos)
+        print('Procesos que han sido asignado a memoria')
         listadoProcesos(coladeAsignados)
         print('------------------------------------')
         asignarCpu(coladeAsignados)
+        print('------------------------------------')
         print('Proceso actualmente en CPU: ' + str(procesador.idProcesoAsignado) + ' (0 indica CPU desocupado')
         print('------------------------------------')
-        print('Procesos que aun se encuentran en la cola de listos')
-        eliminar()
-        listadoProcesos(coladeListos)
+        print('Procesos que han sido asignado a memoria pero todavia no se han ejecutado')
+        #eliminar()
+        listadoProcesos(coladeNuevos)
         print('------------------------------------')
         # Eliminar procesos que ya termino de ejecutar
-        #print('procesador.tiempoDeAsignacion ' + str(procesador.tiempoDeAsignacion) +  ' procesador.tiempoDeIrrupcion ' + str(procesador.tiempoDeIrrupcion))
+        # #print('procesador.tiempoDeAsignacion ' + str(procesador.tiempoDeAsignacion) +  ' procesador.tiempoDeIrrupcion ' + str(procesador.tiempoDeIrrupcion))
         controlProcesos()
         print('Procesos terminados concluida la instancia de tiempo '+ str(tiempo))
         listadoProcesos(colaTerminados)
