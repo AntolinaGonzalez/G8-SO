@@ -107,6 +107,7 @@ def memoria(procesos):
         particiones[id].tiempoSalida = tiempo + proceso.tiempoIrrupcion
         particiones[id].proceso = proceso
         particiones[id].idProceso = proceso.idProceso
+        tamanio=99999
     particioneslistado()
 
 
