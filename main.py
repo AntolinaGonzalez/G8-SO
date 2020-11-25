@@ -13,26 +13,31 @@ id_proceso = 0
 
 def particioneslistado():
     print('----------------------------------------------Particiones---------------------------------------------------------')
+    print('     id Particion           |       Tamanio               |       Estado               |       Fragmentacion        |        Proceso         ')
     espacio = '             '
-    # for i in particiones:
-    #     print('id de la Particion: ' + str(i.idParticion))
-    #     print('tamanio de la particion: ' + str(i.tamanio))
-    #     print('estado de la particion: ' + str(i.estado))
-    #     print('fragmentacion interna: ' + str(i.fragmentacion) + 'Kb')
-    #     print('----------------------------------------------')
-    print('     id Particion           |       Tamanio               |       Estado              |       Fragmentacion         |')
-    print('-------------------------------------------------------------------------------------------------------------------')
-    print(espacio + str(particiones[0].idParticion) + espacio + '|' + espacio + str(particiones[0].tamanio) + espacio + '|' +
-          espacio + str(particiones[0].estado) + espacio + '|' + espacio + str(particiones[0].fragmentacion) + espacio + '  |')
-    print('-------------------------------------------------------------------------------------------------------------------')
-    print(espacio + str(particiones[1].idParticion) + espacio + ' |' + espacio + str(particiones[1].tamanio) + espacio + '|' +
-          espacio + str(particiones[1].estado) + espacio + ' |' + espacio + str(particiones[1].fragmentacion) + espacio + ' |')
-    print('-------------------------------------------------------------------------------------------------------------------')
-    print(espacio + str(particiones[2].idParticion) + espacio + ' |' + espacio + str(particiones[2].tamanio) + espacio + '|' +
-          espacio + str(particiones[2].estado) + espacio + ' |' + espacio + str(particiones[2].fragmentacion) + espacio + ' |')
-    print('-------------------------------------------------------------------------------------------------------------------')
-    print(espacio + str(particiones[3].idParticion) + espacio + ' |' + espacio + str(particiones[3].tamanio) + espacio + ' |' +
-          espacio + str(particiones[3].estado) + espacio + ' |' + espacio + str(particiones[3].fragmentacion) + espacio + ' |')
+    for i in particiones:
+        
+        if (i.proceso != None and len(i.idParticion)>1):
+            print(espacio + str(i.idParticion) + '       ' + '|' + espacio + str(i.tamanio) + espacio + '|' +
+                  espacio + str(i.estado) + espacio + '|' + espacio + str(i.fragmentacion) + espacio + '  |' + espacio + str(i.proceso.idProceso))
+        if (i.proceso != None and len(i.idParticion)==1):
+            print(espacio + str(i.idParticion) + '            ' + '|' + espacio + str(i.tamanio) + espacio + '|' +
+                  espacio + str(i.estado) + espacio + '|' + espacio + str(i.fragmentacion) + espacio + '  |' + espacio + str(i.proceso.idProceso))
+
+        if(i.proceso == None and len(i.idParticion)> 1 and (i.tamanio)>99):
+            print(espacio + str(i.idParticion) + '            ' + ' |' + espacio + str(i.tamanio) + espacio + '|' +
+                  espacio + str(i.estado) + espacio + ' |' + espacio + str(i.fragmentacion) + espacio + ' |' + espacio + '0' + espacio + '|')
+        if(i.proceso == None and len(i.idParticion)<= 1 and i.tamanio > 99):
+            print(espacio + str(i.idParticion) + espacio + ' |' + espacio + str(i.tamanio) + espacio + '|' +
+                  espacio + str(i.estado) + espacio + ' |' + espacio + str(i.fragmentacion) + espacio + ' |' + espacio + '0' + espacio + '|')
+        if(i.proceso != None and len(i.idParticion)> 1 and (i.tamanio)<=99):
+            print(espacio + str(i.idParticion) + '            ' + ' |' + espacio + str(i.tamanio) + espacio + ' |' +
+                  espacio + str(i.estado) + espacio + ' |' + espacio + str(i.fragmentacion) + espacio + ' |' + espacio + '0' + espacio + '|')
+        if(i.proceso == None and len(i.idParticion)<= 1 and i.tamanio<=99):
+            print(espacio + str(i.idParticion) + espacio + ' |' + espacio + str(i.tamanio) + espacio + ' |' +
+                  espacio + str(i.estado) + espacio + ' |' + espacio +' '+ str(i.fragmentacion) + espacio + '|' + espacio + '0' + espacio + '|')
+
+  
 
 # listado de procesos
 
