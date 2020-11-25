@@ -12,32 +12,38 @@ id_proceso = 0
 
 
 def particioneslistado():
-    print('----------------------------------------------Particiones---------------------------------------------------------')
-    print('     id Particion           |       Tamanio               |       Estado               |       Fragmentacion        |        Proceso         ')
+    print('----------------------------------------------------------------Particiones----------------------------------------------------------------------')
+    print('     id Particion           |       Tamanio               |       Estado               |       Fragmentacion        |        Proceso            |')
+    print('-------------------------------------------------------------------------------------------------------------------------------------------------')
+
     espacio = '             '
     for i in particiones:
-        
-        if (i.proceso != None and len(i.idParticion)>1):
-            print(espacio + str(i.idParticion) + '       ' + '|' + espacio + str(i.tamanio) + espacio + '|' +
-                  espacio + str(i.estado) + espacio + '|' + espacio + str(i.fragmentacion) + espacio + '  |' + espacio + str(i.proceso.idProceso))
-        if (i.proceso != None and len(i.idParticion)==1):
-            print(espacio + str(i.idParticion) + '            ' + '|' + espacio + str(i.tamanio) + espacio + '|' +
-                  espacio + str(i.estado) + espacio + '|' + espacio + str(i.fragmentacion) + espacio + '  |' + espacio + str(i.proceso.idProceso))
 
-        if(i.proceso == None and len(i.idParticion)> 1 and (i.tamanio)>99):
+        if(i.proceso != None and len(i.idParticion) > 1 and (i.tamanio) > 99):
+            print(espacio + str(i.idParticion) + '            ' + ' |' + espacio + str(i.tamanio) + espacio + '|' +
+                  espacio + str(i.estado) + espacio + ' |' + espacio + str(i.fragmentacion) + espacio + ' |' + espacio + str(i.proceso.idProceso) + espacio + '|')
+        if(i.proceso != None and len(i.idParticion) <= 1 and i.tamanio > 99):
+            print(espacio + str(i.idParticion) + espacio + ' |' + espacio + str(i.tamanio) + espacio + '|' +
+                  espacio + str(i.estado) + espacio + ' |' + espacio + str(i.fragmentacion) + espacio + ' |' + espacio + str(i.proceso.idProceso) + espacio + '|')
+
+        if(i.proceso != None and len(i.idParticion) <= 1 and i.tamanio <= 99):
+            print(espacio + str(i.idParticion) + espacio + ' |' + espacio + str(i.tamanio) + espacio + ' |' +
+                  espacio + str(i.estado) + espacio + ' |' + espacio + ' ' + str(i.fragmentacion) + espacio + '|' + espacio + str(i.proceso.idProceso) + espacio + '|')
+
+        if(i.proceso == None and len(i.idParticion) > 1 and (i.tamanio) > 99):
             print(espacio + str(i.idParticion) + '            ' + ' |' + espacio + str(i.tamanio) + espacio + '|' +
                   espacio + str(i.estado) + espacio + ' |' + espacio + str(i.fragmentacion) + espacio + ' |' + espacio + '0' + espacio + '|')
-        if(i.proceso == None and len(i.idParticion)<= 1 and i.tamanio > 99):
+        if(i.proceso == None and len(i.idParticion) <= 1 and i.tamanio > 99):
             print(espacio + str(i.idParticion) + espacio + ' |' + espacio + str(i.tamanio) + espacio + '|' +
                   espacio + str(i.estado) + espacio + ' |' + espacio + str(i.fragmentacion) + espacio + ' |' + espacio + '0' + espacio + '|')
-        if(i.proceso != None and len(i.idParticion)> 1 and (i.tamanio)<=99):
+        if(i.proceso != None and len(i.idParticion) > 1 and (i.tamanio) <= 99):
             print(espacio + str(i.idParticion) + '            ' + ' |' + espacio + str(i.tamanio) + espacio + ' |' +
-                  espacio + str(i.estado) + espacio + ' |' + espacio + str(i.fragmentacion) + espacio + ' |' + espacio + '0' + espacio + '|')
-        if(i.proceso == None and len(i.idParticion)<= 1 and i.tamanio<=99):
+                  espacio + str(i.estado) + espacio + ' |' + espacio + str(i.fragmentacion) + espacio + ' |' + espacio + str(i.proceso.idProceso) + espacio + '|')
+        if(i.proceso == None and len(i.idParticion) <= 1 and i.tamanio <= 99):
             print(espacio + str(i.idParticion) + espacio + ' |' + espacio + str(i.tamanio) + espacio + ' |' +
-                  espacio + str(i.estado) + espacio + ' |' + espacio +' '+ str(i.fragmentacion) + espacio + '|' + espacio + '0' + espacio + '|')
+                  espacio + str(i.estado) + espacio + ' |' + espacio + ' ' + str(i.fragmentacion) + espacio + '|' + espacio + '0' + espacio + '|')
+        print('-------------------------------------------------------------------------------------------------------------------------------------------------')
 
-  
 
 # listado de procesos
 
@@ -106,6 +112,7 @@ def Nuevos():
 
 
 def memoria(procesos):
+    global coladeAsignados
     tamanio = 9999999
     id = -5
     for i in procesos:
@@ -114,7 +121,6 @@ def memoria(procesos):
                 tamanio = j.tamanio
                 id = int(j.idParticion)
                 proceso = i
-                print('particiones')
         if id > 0:
             coladeAsignados.append(i)
             particiones[id].estado = 1
@@ -125,6 +131,8 @@ def memoria(procesos):
             particiones[id].idProceso = proceso.idProceso
         tamanio = 9999999
         id = -5
+    coladeAsignados = sorted(
+                coladeAsignados, key=lambda z: z.tiempoIrrupcion)
     particioneslistado()
 
 
@@ -197,29 +205,14 @@ def controlSalidaProceso():
 # visualizamos las particiones
 particioneslistado()
 # creamos un proceso para iniciar
-print(CrearProceso())
+CrearProceso()
 print('Lista de procesos \n')
 listadoProcesos(procesos)
 x = '0'
 
-
-while ejecucion:
-    # menu
-    print('')
-    if x != '2':
-        x = input(
-            '1. Cargar mas procesos \n2. Ejecucion de los procesos en memoria \n3.q para salir\n')
-    else:
-        input('Presione cualquier tecla para continuar la ejecución de los procesos ya cargados')
-    if x == '1':
-     # se crean procesos
-        print(CrearProceso())
-        print('Lista de procesos \n')
-        # listado de procesos
-        listadoProcesos(procesos)
-
-    if x == '2':
-        # procesos en memoria
+def ejecucion():
+    global tiempo
+    while ejecucion:
         print('-------------------------')
         print('| Instancia de tiempo ' + str(tiempo) + ' |')
         print('-------------------------')
@@ -253,5 +246,25 @@ while ejecucion:
         asignarCpu(coladeAsignados)
         tiempo += 1
         procesador.tiempoTranscurrido += 1
-    if x == 'q':
-        ejecucion = False
+        x = input()
+        if len(colaTerminados)==len(procesos):
+            return False
+
+while ejecucion:
+    # menu
+    print('')
+    if x != '2':
+        x = input(
+            '1. Cargar mas procesos \n2. Ejecucion de los procesos en memoria \n3.q para salir\n')
+    else:
+        input('Presione cualquier tecla para continuar la ejecución de los procesos ya cargados')
+    if x == '1':
+     # se crean procesos
+        CrearProceso()
+        print('Lista de procesos \n')
+        # listado de procesos
+        listadoProcesos(procesos)
+
+    if x == '2':
+        ejecucion = ejecucion()
+
